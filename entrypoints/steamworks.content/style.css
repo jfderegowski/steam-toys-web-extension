@@ -1,0 +1,28 @@
+.swu-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10000;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #1b2838;
+  color: #c7d5e0;
+  border: 1px solid #66c0f4;
+  border-radius: 6px;
+  font: 13px sans-serif;
+}
+
+.swu-panel textarea {
+  height: 120px;
+  font: 12px monospace;
+}
+
+.swu-panel pre {
+  max-height: 200px;
+  margin: 0;
+  overflow: auto;
+  font-size: 11px;
+}
