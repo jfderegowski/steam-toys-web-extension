@@ -235,5 +235,15 @@ export async function uploadAchievementIcon(
     body: form,
   });
   if (!response.ok) throw new Error(`uploadachievement: HTTP ${response.status}`);
-  return JSON.parse(await response.text()) as { success: number | boolean; message?: string };
+
+  // Meant for an iframe, so the JSON may come wrapped in markup.
+  const text = await response.text();
+  for (const candidate of [text, text.replace(/<[^>]*>/g, '')]) {
+    try {
+      return JSON.parse(candidate) as { success: number | boolean | string; message?: string };
+    } catch {
+      // Try the next form.
+    }
+  }
+  return { success: false, message: `Unexpected response: ${text.slice(0, 200)}` };
 }

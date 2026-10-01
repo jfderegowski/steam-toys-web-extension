@@ -21,3 +21,7 @@ npm run zip     # zip ready for the Chrome Web Store
 ```
 
 To use the built extension in your normal Chrome: `chrome://extensions` → enable **Developer mode** → **Load unpacked** → pick `.output/chrome-mv3`.
+
+## Icon
+
+`assets/icon.png` (1024×1024) is the source; `public/icon/{16,32,48,96,128}.png` are scaled down from it and are what the manifest uses. After changing the source, export those five sizes again under the same names.

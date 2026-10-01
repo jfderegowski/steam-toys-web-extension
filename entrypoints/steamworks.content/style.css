@@ -1,28 +1,150 @@
-.swu-panel {
+:host {
+  all: initial;
+}
+
+.panel {
   position: fixed;
   right: 16px;
   bottom: 16px;
   z-index: 10000;
-  width: 360px;
+  width: 440px;
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px;
   background: #1b2838;
   color: #c7d5e0;
   border: 1px solid #66c0f4;
   border-radius: 6px;
-  font: 13px sans-serif;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  font: 13px/1.4 Arial, Helvetica, sans-serif;
 }
 
-.swu-panel textarea {
-  height: 120px;
-  font: 12px monospace;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #2a475e;
 }
 
-.swu-panel pre {
-  max-height: 200px;
-  margin: 0;
-  overflow: auto;
+.panel.collapsed .header {
+  border-bottom: none;
+}
+
+.panel.collapsed .body {
+  display: none;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  overflow: hidden;
+}
+
+textarea {
+  height: 90px;
+  resize: vertical;
+  padding: 6px;
+  background: #0e1621;
+  color: #c7d5e0;
+  border: 1px solid #2a475e;
+  border-radius: 3px;
+  font: 11px/1.3 Consolas, monospace;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  padding: 5px 12px;
+  background: #2a475e;
+  color: #c7d5e0;
+  border: none;
+  border-radius: 3px;
+  font: inherit;
+  cursor: pointer;
+}
+
+button.primary {
+  background: #4c8a2b;
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.toggle {
+  padding: 0 8px;
+  background: none;
+  font-size: 16px;
+}
+
+.summary.error {
+  color: #ff7b6b;
+}
+
+.list {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.entry {
+  padding: 4px 0;
+  border-bottom: 1px solid #22384d;
+}
+
+.badge {
+  display: inline-block;
+  min-width: 64px;
+  margin-right: 8px;
+  padding: 0 4px;
+  border-radius: 2px;
   font-size: 11px;
+  text-align: center;
+  text-transform: uppercase;
 }
+
+.create .badge { background: #4c8a2b; color: #fff; }
+.update .badge { background: #b5871e; color: #fff; }
+.same .badge { background: #2a475e; }
+.error .badge { background: #a33a2c; color: #fff; }
+.steamOnly .badge { background: #3d4450; }
+
+.name {
+  font-family: Consolas, monospace;
+}
+
+.detail {
+  margin-left: 80px;
+  color: #8f98a0;
+  font-size: 12px;
+  word-break: break-word;
+}
+
+details summary {
+  padding: 4px 0;
+  color: #8f98a0;
+  cursor: pointer;
+}
+
+.log {
+  max-height: 120px;
+  margin: 0;
+  padding: 0 0 0 16px;
+  overflow-y: auto;
+  font-size: 12px;
+}
+
+.log:empty {
+  display: none;
+}
+
+.log .ok { color: #a4d007; }
+.log .error { color: #ff7b6b; }
