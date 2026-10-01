@@ -1,9 +1,12 @@
 import './style.css';
-import { fetchStats, getAppIdFromUrl } from '@/utils/steamworks';
+import { fetchAchievements, fetchStats, getAppIdFromUrl } from '@/utils/steamworks';
 
-// Runs on the Steamworks stats & achievements page of any app.
+// Runs on the Steamworks Stats and Achievements pages of any app.
 export default defineContentScript({
-  matches: ['https://partner.steamgames.com/apps/achievements/*'],
+  matches: [
+    'https://partner.steamgames.com/apps/achievements/*',
+    'https://partner.steamgames.com/apps/stats/*',
+  ],
   main() {
     const panel = document.createElement('div');
     panel.className = 'swu-panel';
@@ -11,7 +14,7 @@ export default defineContentScript({
       <strong>Steam Toys</strong>
       <textarea placeholder="Paste JSON here"></textarea>
       <button type="button" data-action="parse">Parse</button>
-      <button type="button" data-action="fetch-stats">Fetch stats (read only)</button>
+      <button type="button" data-action="fetch-stats">Fetch stats + achievements (read only)</button>
       <pre></pre>
     `;
     document.body.append(panel);
@@ -32,9 +35,12 @@ export default defineContentScript({
     panel.querySelector('[data-action="fetch-stats"]')!.addEventListener('click', async () => {
       output.textContent = 'Loading...';
       try {
-        const stats = await fetchStats(getAppIdFromUrl());
+        const appId = getAppIdFromUrl();
+        const stats = await fetchStats(appId);
+        const { achievements } = await fetchAchievements(appId);
+        console.log('[Steam Toys] fetchachievements', achievements);
         console.log('[Steam Toys] fetchstats', stats);
-        output.textContent = JSON.stringify(stats, null, 2);
+        output.textContent = JSON.stringify({ stats, achievements }, null, 2);
       } catch (e) {
         output.textContent = `Error: ${(e as Error).message}`;
       }
