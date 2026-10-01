@@ -35,14 +35,14 @@ export type AchievementIconKind = 'achievement' | 'achievement_gray';
 export function getSessionId(): string {
   const match = document.cookie.match(/(?:^|;\s*)sessionid=([^;]+)/);
   if (!match) throw new Error('No sessionid cookie, are you logged in to Steamworks?');
-  return decodeURIComponent(match[1]);
+  return decodeURIComponent(match[1]!);
 }
 
 /** App ID from the current page URL, e.g. /apps/achievements/4179640. */
 export function getAppIdFromUrl(url = location.href): number {
   const match = url.match(/\/apps\/achievements\/(\d+)/);
   if (!match) throw new Error(`Not a Stats & Achievements page: ${url}`);
-  return Number(match[1]);
+  return Number(match[1]!);
 }
 
 async function postForm(path: string, fields: Record<string, string | number | boolean>) {
