@@ -1,5 +1,5 @@
 {
-  "name": "steamworks-uploader",
+  "name": "steam-toys-web-extension",
   "description": "Imports Steam stats and achievements into Steamworks from a JSON file.",
   "private": true,
   "version": "0.1.0",

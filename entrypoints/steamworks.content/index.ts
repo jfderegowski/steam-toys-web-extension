@@ -7,7 +7,7 @@ export default defineContentScript({
     const panel = document.createElement('div');
     panel.className = 'swu-panel';
     panel.innerHTML = `
-      <strong>Steamworks Uploader</strong>
+      <strong>Steam Toys</strong>
       <textarea placeholder="Paste JSON here"></textarea>
       <button type="button">Parse</button>
       <pre></pre>

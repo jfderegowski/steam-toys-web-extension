@@ -1,4 +1,4 @@
-# Steamworks Uploader
+# Steam Toys
 
 Browser extension that imports Steam stats and achievements into the Steamworks partner site from a JSON file, since Steamworks has no API for defining them.
 
@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-`npm run dev` opens a separate Chrome profile with the extension loaded and reloads it on every change. Log in to Steamworks in that window and open **Stats & Achievements** of your app; the uploader panel appears in the bottom-right corner.
+`npm run dev` opens a separate Chrome profile with the extension loaded and reloads it on every change. Log in to Steamworks in that window and open **Stats & Achievements** of your app; the Steam Toys panel appears in the bottom-right corner.
 
 ## Build
 
