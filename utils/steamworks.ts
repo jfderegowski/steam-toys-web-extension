@@ -164,6 +164,11 @@ export function saveStat(appId: number, s: StatSave) {
   });
 }
 
+/** Deletes a stat; players' values of it go with it. */
+export function deleteStat(appId: number, statId: number) {
+  return post<{ deleted?: boolean }>(`/apps/deletestat/${appId}/${statId}`, {});
+}
+
 // ---- Achievements ----
 
 export function fetchAchievements(appId: number) {
@@ -206,6 +211,11 @@ export function saveAchievement(appId: number, a: AchievementSave) {
       progressMax: a.progressMax ?? 0,
     },
   );
+}
+
+/** Deletes an achievement, addressed by the stat and bit that hold it. */
+export function deleteAchievement(appId: number, statId: number, bitId: number) {
+  return post<{ deleted?: boolean }>(`/apps/deleteachievement/${appId}/${statId}/${bitId}`, {});
 }
 
 /**

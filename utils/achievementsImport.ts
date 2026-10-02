@@ -14,6 +14,7 @@ import {
 } from './importPlan';
 import { permissionValue, type AchievementItem, type IconFile, type LocalizedInput } from './payload';
 import {
+  deleteAchievement,
   newAchievement,
   saveAchievement,
   uploadAchievementIcon,
@@ -166,8 +167,9 @@ export function describeAchievement(entry: AchievementPlanEntry): EntryView {
 }
 
 /**
- * Creates, saves and uploads the icons of the achievements the plan marks, one request at a time.
- * Returns how many steps failed: saving an achievement and uploading each icon count apart.
+ * Creates, saves and uploads the icons of the achievements the plan marks, one request at a time,
+ * then deletes the achievements only Steamworks has when `deleteMissing` is set. Returns how many
+ * steps failed: saving an achievement, uploading each icon and each deletion count apart.
  *
  * `maxIds` is the highest stat and bit in use, which Steamworks needs to pick the slot of a new
  * achievement; `onMaxIds` hears about every new one so the page can keep its copy current.
@@ -175,6 +177,7 @@ export function describeAchievement(entry: AchievementPlanEntry): EntryView {
 export async function applyAchievements(
   appId: number,
   plan: AchievementPlanEntry[],
+  deleteMissing: boolean,
   maxIds: { maxStatId: number; maxBitId: number },
   log: (message: string, kind: LogKind) => void,
   onMaxIds: (maxIds: { maxStatId: number; maxBitId: number }) => void,
@@ -250,6 +253,24 @@ export async function applyAchievements(
     }
 
     await pause();
+  }
+
+  if (deleteMissing) {
+    for (const entry of plan) {
+      if (entry.action !== 'steamOnly') continue;
+
+      const { steam } = entry;
+      try {
+        const result = await deleteAchievement(appId, Number(steam.stat_id), Number(steam.bit_id));
+        if (!result?.deleted) throw new Error('Steamworks did not delete it.');
+        log(`${steam.api_name}: deleted`, 'ok');
+      } catch (e) {
+        failed++;
+        log(`${steam.api_name}: ${(e as Error).message}`, 'error');
+      }
+
+      await pause();
+    }
   }
 
   return failed;

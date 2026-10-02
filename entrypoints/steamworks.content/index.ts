@@ -40,8 +40,8 @@ function statsOptions(appId: number): ImportPanelOptions<ReturnType<typeof planS
       return planStats(items, await fetchStats(appId));
     },
     describe: describeStat,
-    apply: (plan, log) =>
-      applyStats(appId, plan, readMaxIdsFromPage().maxStatId, log, (maxStatId) => setPageValue('max_statid_used', maxStatId)),
+    apply: (plan, deleteMissing, log) =>
+      applyStats(appId, plan, deleteMissing, readMaxIdsFromPage().maxStatId, log, (maxStatId) => setPageValue('max_statid_used', maxStatId)),
   };
 }
 
@@ -57,8 +57,8 @@ function achievementsOptions(appId: number): ImportPanelOptions<Awaited<ReturnTy
       return planAchievements(items, achievements, stats, (done, total) => status(`Comparing icons... ${done}/${total}`));
     },
     describe: describeAchievement,
-    apply: (plan, log) =>
-      applyAchievements(appId, plan, readMaxIdsFromPage(), log, ({ maxStatId, maxBitId }) => {
+    apply: (plan, deleteMissing, log) =>
+      applyAchievements(appId, plan, deleteMissing, readMaxIdsFromPage(), log, ({ maxStatId, maxBitId }) => {
         setPageValue('max_statid_used', maxStatId);
         setPageValue('max_bitid_used', maxBitId);
       }),

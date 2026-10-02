@@ -43,8 +43,14 @@
   overflow: hidden;
 }
 
+/* Only the list gives way to a long preview; everything else keeps its size. */
+.body > :not(.list) {
+  flex-shrink: 0;
+}
+
 textarea {
   height: 90px;
+  min-height: 60px;
   resize: vertical;
   padding: 6px;
   background: #0e1621;
@@ -56,11 +62,27 @@ textarea {
 
 .actions {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
+.option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.option input {
+  margin: 0;
+}
+
 button {
+  flex-shrink: 0;
   padding: 5px 12px;
+  white-space: nowrap;
   background: #2a475e;
   color: #c7d5e0;
   border: none;
@@ -116,6 +138,7 @@ button:disabled {
 .same .badge { background: #2a475e; }
 .error .badge { background: #a33a2c; color: #fff; }
 .steamOnly .badge { background: #3d4450; }
+.delete .badge { background: #a33a2c; color: #fff; }
 
 .name {
   font-family: Consolas, monospace;

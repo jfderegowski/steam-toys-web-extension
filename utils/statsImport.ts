@@ -12,7 +12,7 @@ import {
   type LogKind,
 } from './importPlan';
 import { permissionValue, type StatItem } from './payload';
-import { newStat, saveStat, type StatInfo } from './steamworks';
+import { deleteStat, newStat, saveStat, type StatInfo } from './steamworks';
 
 export type StatPlanEntry =
   | { action: 'create'; item: StatItem }
@@ -92,7 +92,8 @@ export function describeStat(entry: StatPlanEntry): EntryView {
 }
 
 /**
- * Creates and saves the stats the plan marks, one request at a time. Returns how many failed.
+ * Creates and saves the stats the plan marks, one request at a time, then deletes the stats only
+ * Steamworks has when `deleteMissing` is set. Returns how many failed.
  *
  * `maxStatId` is the highest stat ID in use, achievements included, which Steamworks needs to pick
  * the next one; `onMaxStatId` hears about every new one so the page can keep its copy current.
@@ -100,6 +101,7 @@ export function describeStat(entry: StatPlanEntry): EntryView {
 export async function applyStats(
   appId: number,
   plan: StatPlanEntry[],
+  deleteMissing: boolean,
   maxStatId: number,
   log: (message: string, kind: LogKind) => void,
   onMaxStatId: (maxStatId: number) => void,
@@ -154,6 +156,24 @@ export async function applyStats(
     }
 
     await pause();
+  }
+
+  if (deleteMissing) {
+    for (const entry of plan) {
+      if (entry.action !== 'steamOnly') continue;
+
+      const { steam } = entry;
+      try {
+        const result = await deleteStat(appId, Number(steam.stat_id));
+        if (!result?.deleted) throw new Error('Steamworks did not delete it.');
+        log(`${steam.name}: deleted`, 'ok');
+      } catch (e) {
+        failed++;
+        log(`${steam.name}: ${(e as Error).message}`, 'error');
+      }
+
+      await pause();
+    }
   }
 
   return failed;
